@@ -1,10 +1,19 @@
 var http = require('http');
 http.createServer(function (req, res) {
     console.log(`Just got a request at ${req.url}!`)
-    res.write(`Yo! ${req.url}`);
+    let data = '';
+    req.on('data', chunk => {
+        data += chunk;
+    })
+    req.on('end', () => {
+        console.log(JSON.parse(data)); // 'Buy the milk'
+        res.write(JSON.parse(data))
+        res.end();
+    })
+    // res.write(`Yo! ${req.url}`);
 
 
-    res.end();
+    // res.end();
     // fetch('https://www.google.com/recaptcha/api/siteverify', {
     //     method: 'POST',
     //     // mode: 'no-cors',
